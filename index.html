@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Planner Pernikahan</title>
+  <meta name="theme-color" content="#F8D3DA">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    html, body { margin:0; padding:0; height:100%; background:#FBF6EE; overflow:hidden; }
+    #app { position:fixed; inset:0; width:100%; height:100%; border:0; }
+    #loader { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center;
+      justify-content:center; background:#FBF6EE; font-family:sans-serif; color:#7B1E1E; z-index:2;
+      transition:opacity .4s; }
+    #loader img { width:96px; height:96px; border-radius:22px; }
+    #loader.hide { opacity:0; pointer-events:none; }
+    #offline { display:none; position:fixed; bottom:12px; left:12px; right:12px; padding:10px;
+      background:#7B1E1E; color:#fff; font-family:sans-serif; text-align:center; border-radius:10px; z-index:3; }
+  </style>
+</head>
+<body>
+  <div id="loader"><img src="icons/icon-192.png" alt=""><p>Memuat...</p></div>
+  <div id="offline">Tidak ada koneksi internet</div>
+
+  <!-- GANTI URL di bawah jika deployment Apps Script berubah -->
+  <iframe id="app"
+    src="https://script.google.com/macros/s/AKfycbw4No9jzl38DyZ5QqK-vWle3iqFb7LRA6g9ThxG0HbTXLNp6kdcmGYUgdGT67SfHcub/exec"
+    allow="clipboard-write; fullscreen; camera; microphone; geolocation"
+    allowfullscreen></iframe>
+
+  <script>
+    const f = document.getElementById('app'), l = document.getElementById('loader'), o = document.getElementById('offline');
+    f.addEventListener('load', () => l.classList.add('hide'));
+    setTimeout(() => l.classList.add('hide'), 8000);
+    const net = () => { o.style.display = navigator.onLine ? 'none' : 'block'; };
+    addEventListener('online', net); addEventListener('offline', net); net();
+    if ('serviceWorker' in navigator) {
+      addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+    }
+  </script>
+</body>
+</html>
